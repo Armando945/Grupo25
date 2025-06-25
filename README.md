@@ -1,5 +1,5 @@
 
-Grupo nº 25
+Grupo nº 24
 Integrantes:
 - Armando Paulo Gomes
 - Makenda Figueredo
