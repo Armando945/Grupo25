@@ -1,0 +1,705 @@
+package GRUPO014PF1;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.NullPointerException;
+import java.util.Scanner;
+import java.util.InputMismatchException;
+    public class Main {
+        final int N = 100;
+        static Pungo1  p = new Pungo1();
+        public static void main(String[] args) {
+            Pungo1  pungo[] = new Pungo1[100];
+            Pungo1 histanimal[] = new Pungo1[200]; 
+            File arquivo = new File("index.txt");
+            File arquivo1 = new File("index_his.txt");
+        
+            System.out.println("MISTER   Hello World!");
+            // algumas variaveis auxilires
+            int opcao , recebe =0;                                
+            String q,w;
+            int r=0,t,i;
+            int cont = 0, cont2=0 , etapa=0, arquicont=0;                                
+            Scanner teclado = new Scanner(System.in);     
+                                    
+            // menu principal do programa 
+            do{
+                    System.out.println("======================================================================================#");
+                    System.out.println("|                                                VETERINARIA                          |");
+                    System.out.println("======================================================================================#");
+                    System.out.println("|                                      PUNGO-ANDONGO                                  |");
+                    System.out.println("======================================================================================#");
+                    System.out.println("[1]- REGISTRAR PROPRIETARIO        |      ?????????    /       /_____/  /    /|       |");
+                    System.out.println("[2]- REGISTRAR ANIMAL              |      | @   @ |   /________|     | /    / |_______|");            
+                    System.out.println("[3]- REGISTRAR VISITA              | ###  |    +++|   | _____  |_____|/____/  |       |");
+                    System.out.println("[4]- CONSULTAR HISTORICO DE ANIMAL | ###  |_______|   | |___|  |     |  __|   /       |");
+                    System.out.println("[5]- LISTAGEM                      | | |__|   |______/|________|_____|__|_|  /        |");
+                    System.out.println("[6]- GUARDAR DADOS NO FICHEIRO     | |____    |-----/ |  ___   |          | /         |");        
+                    System.out.println("[7]- SAIR                          |     /    |    /  |  | |   |          |/          |");
+                    System.out.println("======================================================================================#");
+                   
+                   try{     
+                        recebe = teclado.nextInt();
+                          }catch(     InputMismatchException e){
+                        System.out.println("erro argumento invalido escolha uma opcao valida "+ e.getMessage()); 
+                               recebe = 2;
+                    }
+         
+                    opcao= recebe;
+                    limpatela();
+                    switch(opcao){
+                                case 1:
+                                     if(etapa==0){
+                                            pungo[cont]= new Pungo1();
+                                            registrardono( pungo[cont],cont);
+                                            pungo[cont].mostrard();
+                                            System.out.println("digite qualquer numero ou letra para continuar "); 
+                                            teclado.nextLine();
+                                            limpatela();
+                   
+                                            etapa=1;
+                                     }else{
+                                            System.out.println("ja inicializaste um cadastro, finalize, cadastre o seu animal ");
+                                     }
+                                break;
+                                case 2 : // se a etapa for = 1 ele vai continuar a preencher os dados  que faltam   se etapa nao for 1 entra no else 
+                                    if(etapa==1){
+                                                registraranimal(pungo[cont],cont);
+                                                pungo[cont].mostrara();
+                                                System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                teclado.nextLine();
+                                                limpatela();
+                   
+                                                cont++; 
+                                                etapa=0;
+                                      } else{ // aqui entra num meno 
+                                                limpatela();         
+                                                System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                teclado.nextLine();
+                                                limpatela();
+                                                System.out.printf("[1]-  cadastre um  respetivo proprietario  para se deseja cadastrar um animal digite 1 \n");
+                                                System.out.printf("[2]- se deseja adicionar mais um animal a um  respetivo proprietario  ja existente digite 2 \n");
+                                                
+                                                int prop = teclado.nextInt();
+                                                if(prop==1){// se prop for 1 vai cadastrar um  novo elemento
+                                                        if(etapa==0){
+                                                            pungo[cont]= new Pungo1();
+                                                            registrardono( pungo[cont],cont);
+                                                            pungo[cont].mostrard();
+                                                            etapa=1;
+                                                            if(etapa==1){
+                                                                //pungo[cont]= new Pungo1();
+                                                                registraranimal(pungo[cont],cont);
+                                                                pungo[cont].mostrara();
+                   
+                                                                cont++; 
+                                                                etapa=0;
+                                                                System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                                teclado.nextLine();
+                                                                limpatela();
+                                                                                  
+                                                            }
+                                                        }else{
+                                                                System.out.println("ja inicializaste um cadastro finalize, cadastre o seu animal ");
+                                                        }
+                                                }else{
+                                                    if(prop==2 && cont>0){ // se encontra um proprietario ja cadastrado vai cadastra de novo alem de um ja criado mas com um outro animal 
+                                                        System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                        teclado.nextLine();
+                                                        System.out.println("digite o nome de registo do proprietario :" );
+                                                        q = teclado.nextLine();
+                                                        for(i=0;i<=cont;i++){ // se encontra o dono vai copiar os dados do dono criar um novo cadastro mas com os novos dados do novo animal
+                                                            if( pungo[i] != null && pungo[i].nomedono.equalsIgnoreCase(q)||(pungo[i].iddono.equalsIgnoreCase(q))){r=i;
+                                                                    System.out.println("encontrado na posicao ....."+i); // os novo dados vai receber os dados antigos do dono
+                                                                    pungo[cont]= new Pungo1();
+                                                                    pungo[cont].nomedono=pungo[r].nomedono;
+                                                                    pungo[cont].iddono=pungo[r].iddono;
+                                                                    pungo[cont].contacto=pungo[r].contacto;
+                                                                    registraranimal(pungo[cont],cont);// depois vai cadastra o animal
+                                                                    pungo[cont].mostrara(); 
+                                                                
+                                                                    System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                                    teclado.nextLine();
+                                                                    limpatela();
+                                                                               
+                                                                    cont++;
+                                                                    break;
+                                                            }else{System.out.println("vazio na posicao ....."+i);}
+                                                        }
+                                                    }
+                                                }                          
+                                                //System.out.println(" NENHUM PROPRIETARIO CADASTRADO  ");
+                                                }// fimm if
+                                        break;
+                                        case 3 : // registar visita 
+                                            if(cont>0 && etapa == 0){
+                                                System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                teclado.nextLine();
+                                                System.out.println("digite o nome de registo do animal :" ); 
+                                                q = teclado.nextLine();
+                                                for(i=0;i<=cont;i++){
+                                                    if(pungo[i] != null && pungo[i].nomeanimal.equalsIgnoreCase(q)||(pungo[i].idbixo.equalsIgnoreCase(q))){
+                                                        histanimal[cont2]= new Pungo1();
+                                                        System.out.println("encontrado na posicao  "+i);
+                                                        registrarvisita(histanimal[cont2]);
+                                                        histanimal[cont2].idbixo= pungo[i].idbixo; 
+                                                        histanimal[cont2].nomeanimal=pungo[i].nomeanimal;                                 
+                                                        histanimal[cont2].contacto=pungo[i].contacto;
+                                                        histanimal[cont2].idade=pungo[i].idade;
+                                                        histanimal[cont2].data=pungo[i].data;
+                                                        histanimal[cont2].racca=pungo[i].racca;
+                                                        histanimal[cont2].especie=pungo[i].especie;
+                                                        histanimal[cont2].nomedono=pungo[i].nomedono;
+                                                        histanimal[cont2].iddono=pungo[i].iddono;       
+                                                             
+                                                        histanimal[cont2].consulta();
+                                                        System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                        teclado.nextLine();
+                                                        limpatela();
+                   
+                                                        cont2++;
+                                                        break;
+                                                    }else{  System.out.println(".................."+i);}
+                                                  }
+                                                }else{System.out.println("NENHUM ANIMAL CADASTRADO CADASTRE UM ANIMAL ");}
+                                            break;
+                                            case 4:   // consultar historico de animais
+                                                int mm = 0;
+                                                if(cont2>0 && etapa == 0 && histanimal != null){
+                                                    System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                    teclado.nextLine();
+                                                    System.out.println("digite o nome de registo do animal ");
+                                                    q = teclado.nextLine();
+                                                    for(i=0;i<cont2;i++){
+                                                        if(histanimal[i]!=null && histanimal[i].nomeanimal.equalsIgnoreCase(q)||(histanimal[i].idbixo.equalsIgnoreCase(q))){
+                                                            histanimal[i].consulta();
+                                                           // break;
+                                                        }else{System.out.println("EMPTY ...!");}}
+                                                    System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                    teclado.nextLine();
+                                                    limpatela();
+                   
+                                                }else{ System.out.println("HISTORICO DE ANIMAL VAZIO  [EMPTY]");}
+                                            break;             
+                                            case 5 :
+                                                String nome1, nome2,nome3;
+                                                boolean aux = false ;
+                                                int opcao1=0;
+                                                do{
+                                                    
+                                                    System.out.println("========================================#");
+                                                    System.out.println("[1]- LISTAGEM POR ANIMAL         ?      |");
+                                                    System.out.println("[2]- LISTAGEM POR DONO         _^__^_   |");
+                                                    System.out.println("[3]- LISTAR TODOS ANIMAIS     | @  @ |  |");
+                                                    System.out.println("[4]- VOLTAR                   |   V  |  |");
+                                                    System.out.println("========================================#");
+                                                    opcao1 = teclado.nextInt();
+                                                    switch(opcao1){
+                                                            case 1:
+                                                                if(cont>0){
+                                                                    System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                                    teclado.nextLine();
+                                                                    limpatela();
+                                                                    System.out.println("digite o nome de registro do animal ");
+                                                                    nome1 = teclado.nextLine();
+                                                                    for(i=0;i<=cont-1;i++){
+                                                                          if(pungo[i] != null && nome1.equalsIgnoreCase(pungo[i].nomeanimal)||(nome1.equalsIgnoreCase(pungo[i].idbixo))){
+                                                                                    pungo[i].listagemanimal(); 
+                                                                                    r=i; 
+                                                                                    break;
+                                                                            }else{ System.out.println("VAZIO ");}
+                                                                    }
+                    
+                                                                }else{
+                                                                    System.out.println("LISTA VAZIA NINGUEM CADASTRADO ");    
+                                                                }
+                                                    break;
+                                                    case 2 : // listagem dos numero de animais de um determinado dono 
+                                                        try{       
+                                                            if(cont>0){
+                                                                System.out.println("digite qualquer numero ou letra para continuar "); 
+                                                                teclado.nextLine();
+                                                                limpatela();
+                                                                System.out.println("digite o nome de registro do proprietario ");
+                                                                nome1 = teclado.nextLine();
+                                                                for(i=0 ; i<=cont-1;i++){
+                                                                    if(pungo[i]!=null && nome1.equalsIgnoreCase(pungo[i].nomedono)||nome1.equalsIgnoreCase(pungo[i].iddono)){
+                                                                             pungo[i].listagemdono();
+                                                                    }else{ System.out.println("VAZIO ");}                          
+                                                                }
+                    
+                                                            }else{
+                                                                System.out.println("LISTA VAZIA NINGUEM CADASTRADO ");    
+                                                            }
+                                                        }catch(NullPointerException e){ 
+                                                            System.out.println("erro pisicao null " +e.getMessage());}
+                                                    break;
+                                                    case 3 :
+                                                        try{
+                                                            if(cont>0){
+                                                                 for( i=0 ; i<=cont-1;i++){                                
+                                                                     pungo[i].listartodosanimais();             
+                                                                 }
+                    
+                                                            }else{
+                                                                System.out.println("LISTA VAZIA NINGUEM CADASTRADO ");     
+                                                            }
+                                                        }catch(NullPointerException e){ 
+                                                            System.out.println("erro pisicao null " +e.getMessage());}
+                    
+                                                    break;
+                                                    case 4 :
+                                                         System.out.println("^_^  VOLTOU...! ");
+                                                         opcao= 4;
+                                                    break;
+                                                    default:
+                                                        System.out.printf("*_* ERRO !! \n opcao invalida selecione uma das opcoes abaixo \n\n\n\n");
+                                        }//fim switch
+                                }while(opcao!=4);
+                                break;
+                                case 6 :
+                                    if(cont>0 ){
+                                        for(i=0;i<=cont;i++){
+                                            if(pungo[i]!=null){
+                    
+                                                guardardados(pungo[i], arquivo);
+                                            }
+                                        }
+                                        if(cont2>0){
+                                            for(i=0;i<=cont2;i++){
+                                                if(histanimal[i]!=null){
+                                                    guardardados(histanimal[i], arquivo1 ); 
+                                                }                          
+                                            }  
+                                        }
+                                    }else{   System.out.printf(" NINGUEM CADASTRADO \n\n");}
+                                break;
+                                case 7 :
+                                    System.out.println("^_^ OBRIGADO VOLTE SEMPRE ...! ");
+                                    opcao = 7;
+                                break;
+                                default:
+                                    System.out.printf("*_* ERRO !! \n opcao invalida selecione uma das opcoes abaixo \n\n\n\n");
+                        }//fim switch
+                           
+                }while(opcao !=7);
+                  
+    
+    }
+        
+     
+     public static  void registraranimal(Pungo1 pungo,int cont){
+        Scanner teclado = new Scanner(System.in);
+        int x = 1,y=1;
+        String nomeanima; 
+        int ano,dia,mes;
+                   
+        try{
+            do{
+                System.out.print("nome do animal  : ");
+                pungo.nomeanimal= teclado.nextLine();
+                nomeanima =pungo.nomeanimal;
+                y = p.verifnome(nomeanima,nomeanima);
+            }while(y!=0);
+         }catch(     InputMismatchException e){
+         System.out.println("erro nome invalido "+ e.getMessage());
+        }
+          
+          limpatela();
+        System.out.print("qual a especie do animal  : ");
+        pungo.especie = teclado.nextLine();
+        System.out.print("qual a raça do animal : ");
+        pungo.racca = teclado.nextLine();
+          limpatela();
+                   
+       try{
+        do{ 
+            System.out.print("digita o ano  de nascimento : ");
+            ano = teclado.nextInt();
+            System.out.print("digite o dia de nascimento : ");
+            dia = teclado.nextInt();
+            System.out.print("digite o numero relacionado ao mes  : ");
+            mes = teclado.nextInt();
+            x = p.verifidata(ano,dia,mes);
+        }while(x!=0);
+        pungo.data = p.convertipo(ano,dia,mes);
+        pungo.idbixo = "CLI"+p.nomearxxx( cont)+"AO";
+        pungo.idade = 2025-ano;
+      System.out.println("ID  "+pungo.idbixo);
+     
+       }catch(     InputMismatchException e){
+         System.out.println("erro caracter invalido "+ e.getMessage());
+        }            
+          limpatela();
+ }// fim registrar animal 
+   
+     
+  public static  void registrardono( Pungo1 pungo,int cont){
+        Scanner teclado = new Scanner(System.in);
+        int y=1;
+        String nome1; 
+       limpatela();         
+       System.out.println("digite qualquer numero ou letra para continuar "); 
+       teclado.nextLine();
+       limpatela();
+       
+        try{
+          do{
+              System.out.print("escreva o nome do proprietario : ");
+              pungo.nomedono = teclado.nextLine();
+              nome1 = pungo.nomedono;
+              y = p.verifnome(nome1,nome1);
+          }while(y!=0    && nome1!= null);
+      }catch(     InputMismatchException e){
+         System.out.println("erro nome invalido "+ e.getMessage());
+      }
+   
+      try{
+         System.out.print("digite o contacto do proprietario   : ");
+         pungo.contacto = teclado.nextInt();
+      }catch(     InputMismatchException e){
+         System.out.println("erro nome invalido "+ e.getMessage());
+      }
+   
+      pungo.iddono = "PRO"+p.nomearxxx( cont)+"AO";
+       limpatela();
+                   
+  }// fim registrar dono 
+   
+      
+   
+ public static   void registrarvisita(Pungo1 pungo){
+      Scanner teclado = new Scanner(System.in);
+      int y =0,x=0,custo1;
+      int ano,dia,mes;
+      limpatela();
+                   
+      try{
+         do{
+            System.out.printf(" qual o tipo de visita  : \n[1]- consulta  \n[2]- vacinacao \n[3]- higiene (banho) \n");
+            x = teclado.nextInt();
+            if(x==1){
+                pungo.consulta1+=1;
+            }else{
+                if(x==2){ 
+                 pungo.vacina+=1;
+                }else{ 
+                    if(x==3){ 
+                     pungo.banho+=1;    
+                    }
+                }
+            }
+             if(x<1 || x>3){
+                 System.out.println("erro  escolha uma das opcao valida ");
+             }
+      }while(x<1 || x>3);
+       
+      }catch(     InputMismatchException e){
+         System.out.println("erro argumento invalido "+ e.getMessage());
+      }
+      System.out.println("digite qualquer numero ou letra para continuar "); 
+      teclado.nextLine();
+      limpatela();
+  
+      try{
+       System.out.print("nome do veterinario : ");
+       pungo.veterinario = teclado.nextLine();
+         System.out.println("digite qualquer numero ou letra para continuar "); 
+          teclado.nextLine();                                    
+      }catch(     InputMismatchException e){
+         System.out.println("erro nome invalido "+ e.getMessage());
+      }
+   
+     try{
+       do{
+        System.out.print("quanto custou : ");
+        pungo.custo = teclado.nextInt();
+        custo1=pungo.custo;
+        teclado.nextLine();
+      }while(custo1<=0);
+     }catch(     InputMismatchException e){
+         System.out.println("erro argumeto invalido "+ e.getMessage());
+     }
+   
+   
+    do{
+         try{
+     System.out.print("digita ano da visita : ");
+     ano = teclado.nextInt();
+     System.out.print("digite o dia  : ");
+     dia = teclado.nextInt();
+     System.out.print("digite o numero relacionado ao mes  : ");
+     mes = teclado.nextInt();
+     y= p.verificadordata(ano,dia,mes);
+     pungo.datav = p.convertipo(ano,dia,mes);               
+         }catch(     InputMismatchException e){
+              y=0;
+              
+    System.out.println("erro argumento invalido "+ e.getMessage());
+              break;
+   }     
+    System.out.println("erro argumento  "+ y);     
+         }while(y!=1);
+      
+   
+   
+   try{
+        System.out.println("digite qualquer numero ou letra para continuar "); 
+        teclado.nextLine();
+    System.out.println("OBSERVACOES : ");
+    pungo.observ = teclado.nextLine();
+    
+   }catch(     InputMismatchException e){
+    System.out.println("erro argumento invalido "+ e.getMessage());
+   }
+                     limpatela();
+                   
+ } // fim registar visita 
+ 
+     
+     public static void guardardados(Pungo1 pungo ,File arquivo ){
+        
+       String aux;
+       try{
+          FileWriter lapes = new FileWriter(arquivo,true);
+           
+          lapes.write("=======================================================================\n");
+          lapes.write("NOME DO PROPRIETARIO : " +pungo.nomedono+" \n");
+          lapes.write(  "ID DO PROPRIETARIO "+pungo.iddono+" \n");
+          lapes.write("NOME DO ANIMAL "+  pungo.nomeanimal+" \n");
+          lapes.write("ID DO ANIMAl "+ pungo.idbixo+" \n");
+          lapes.write("=======================================================================\n");
+          lapes.write( "ESPECIE "+ pungo.especie+" \n");
+          lapes.write("REÇA  :"+ pungo.racca+" \n");
+          lapes.write( "IDADE DO ANIMAL "+ pungo.idade +" \n");
+          lapes.write("DATA DE NASCIMENTO "+  pungo.data +" \n");
+          lapes.write("=======================================================================\n");
+          lapes.write("DATA ULTIMA CONSULTA "+  pungo.datav+" \n"); 
+          lapes.write( "N* CONSULTA "+ pungo.consulta1 +" \n");
+          lapes.write( "N* VACINA "+  pungo.vacina  +" \n");
+          lapes.write( "N* VISITA PARA HIGIENE "+  pungo.banho +" \n");
+          lapes.write("CUSTO "+  pungo.custo+"KZ \n");
+          lapes.write("NOME DO VETERINARIO  "+   pungo.veterinario +" \n");
+          lapes.write( "CONTACTO DO PROPRIETARIO "+  pungo.contacto +" \n");
+          lapes.write(" OBS "+   pungo.observ+" \n");
+          lapes.write("=======================================================================\n");
+          lapes.close();
+        
+          System.out.println("cadastro feito com sucesso "); 
+       }catch( IOException e){
+           System.out.println("erro ao salvar "+e.getMessage());
+       }
+    } // fim guardar dados
+         
+       public static void limpatela(){
+           for(int i = 0; i <20;i++){
+               System.out.println();
+           }
+           
+       }
+        
+}// fim Main 
+
+============================================================================ classe ==========================================================================
+
+ package GRUPO014PF1;
+import java.util.InputMismatchException; 
+import java.util.Scanner;
+public class Pungo1 {
+   
+      Scanner teclado = new Scanner(System.in);
+   // declaracao de atributos  
+    String nomeanimal;
+    String nomedono;
+    String especie;
+    String racca;
+    String idbixo;
+    String iddono;
+    int idade ;
+    String data ;
+    String datav; 
+    int consulta1=0 ;
+    int vacina =0 ;
+    int banho=0 ;
+    int custo;
+    String observ; 
+    String veterinario ;
+    int contacto ;
+   
+   public String getIdbixo(){
+      return idbixo;
+   }
+   
+   public String getIddono(){
+      return iddono;
+   }
+   public String getNomedono(){
+      return nomedono;
+   }
+   
+
+   public Pungo1(){
+      
+   }
+   
+    
+   
+   
+    void consulta(){
+       System.out.println("=======================================================================");
+       System.out.println("N* DE REGISTRO DO  ANIMAL                :   "+idbixo);
+       System.out.println("N* DE REGISTRO DO PROPRIETARIO           :   "+iddono);   
+       System.out.println("=======================================================================");
+       System.out.println("NOME DO ANIMAL                           :  "+nomeanimal);
+       System.out.println("NOME DO PROPRIETARIO                     : "+nomedono);
+       System.out.println("ESPECIE                                  : "+especie);
+       System.out.println("CONTACTO DONO                            : "+contacto);
+       System.out.println("RACA                                     : "+racca);
+       System.out.println("DATA DE NASCIMENTO                       : "+data);
+       System.out.println("IDADE                                    : "+idade);
+       System.out.println("=======================================================================");
+       System.out.println("N* DE CUNSULTAS                          : "+consulta1);
+       System.out.println("N* DE VACINAS                            : "+vacina);
+       System.out.println("N* DE HIGIENE                            : "+banho);
+       System.out.println("CUSTO DA VISITA                          : "+ custo);
+       System.out.println("=======================================================================");
+       System.out.println("DATA DA ULTIMA VISITA                    : "+datav);
+       System.out.println("NOME DO VETERINARIO QUE O ATENDEU        : "+veterinario);
+       System.out.println("CONSIDERACOES E OBSERVACOES              : "+observ);
+       System.out.println("=======================================================================");
+       
+    }// fim consuta 
+   
+    
+      void listagemanimal(){
+       System.out.println("=======================================================================");
+       System.out.println("N* DE REGISTRO DO PROPRIETARIO       :   "+iddono);
+       System.out.println("NOME DO PROPRIETARIO                 : "+nomedono);    
+       System.out.println("N* DE REGISTRO DO  ANIMAL            :      "+idbixo);
+       System.out.println("=======================================================================");
+       System.out.println("NOME DO ANIMAL                       :  "+nomeanimal);
+       System.out.println("ESPECIE                              : "+especie);
+       System.out.println("RACA                                 : "+racca);
+       System.out.println("DATA DE NASCIMENTO                   : "+data);
+       System.out.println("IDADE                                : "+idade);
+       System.out.println("=======================================================================");
+      
+    } // fim listagem 
+    
+    void listagemdono(){
+       System.out.println("=======================================================================");
+       System.out.println("N* DE REGISTRO DO  ANIMAL :      "+idbixo);
+       System.out.println("=======================================================================");
+       System.out.println("NOME DO ANIMAL            :  "+nomeanimal);
+       System.out.println("ESPECIE                   : "+especie);
+       System.out.println("RACA                      : "+racca);
+       System.out.println("DATA DE NASCIMENTO        : "+data);
+       System.out.println("IDADE                     : "+idade);
+       System.out.println("=======================================================================");
+       
+    } // fim listagem 
+   
+    void listartodosanimais(){
+       
+       System.out.println("=======================================================================");
+       System.out.println("N* DE REGISTRO DO PROPRIETARIO  :      "+iddono);
+       System.out.println("NOME DO PROPRIETARIO      :       "+nomedono);
+       System.out.println("N* DE REGISTRO DO  ANIMAL :      "+idbixo);
+       System.out.println("=======================================================================");
+       System.out.println("NOME DO ANIMAL           :  "+nomeanimal);
+       System.out.println("ESPECIE                  :  "+especie);
+       System.out.println("RACA                     : "+racca);
+       System.out.println("DATA DE NASCIMENTO       : "+data);
+       System.out.println("IDADE                    : "+idade);
+       System.out.println("=======================================================================");
+       
+    } // fim listagem 
+   
+    
+    void mostrard(){ // mostrar dados do dono 
+       System.out.println("=======================================================================");
+       System.out.println("N* DE REGISTRO DO PROPRIETARIO   :      "+iddono);
+       System.out.println("NOME DO PROPRIETARIO             : "+nomedono);
+       System.out.println("CONTACTO DONO                    : "+contacto);
+    System.out.println("=======================================================================");   
+    }//fim mostrar dono
+   void mostrara(){ // mostrar dados do animal cadastrado
+       System.out.println("=======================================================================");
+       System.out.println("N* DE REGISTRO DO  ANIMAL        :      "+idbixo);
+       System.out.println("=======================================================================");
+       System.out.println("NOME DO ANIMAL                   :  "+nomeanimal);
+       System.out.println("ESPECIE                          : "+especie);
+       System.out.println("RACA                             : "+racca);
+       System.out.println("DATA DE NASCIMENTO               : "+data);
+       System.out.println("IDADE                            : "+idade);
+       System.out.println("=======================================================================");
+       
+   }//fim mostrar animal 
+        
+   
+    String convertipo(int ano,int dia,int mes) {
+            String x;
+            // convertendo de inteiro para string 
+            String a =Integer.toString(dia);
+            String b = Integer.toString(mes);
+            String c = Integer.toString(ano);
+            // vai concatenar as Stringo para formanar uma data legivel 
+            
+            String d = a.concat("/"+b+"/");
+            x = d.concat(c);
+            return x;  
+    }//fim convert 
+   
+  String nomearxxx( int cont ){
+        String x;
+        int m=cont;
+        m++;
+        String a ="00";
+        String b = "0";
+        String c = Integer.toString(m);
+        if(cont<10){ x=a.concat(c); }else{ if(cont<100){ x=b.concat(c); }else{ x=c; } }
+        return x; 
+  }// fim nomear dono  
+     
+   int verificadordata(int ano, int dia, int mes){
+      int k =0;
+      if(((ano>=2024)&&(ano<=2025))&&((dia<=31)&&(dia>=1))&&((mes>=1)&&(mes<=12))){ k=1;
+      }else{ System.out.println("ERRO DATA  INVALIDA ");}
+      return k;
+   } // fim do verificador de data 
+   
+   int  verifidata(int ano,int dia,int mes){
+      int d = 1;
+      if(((2025-ano>=1)&&(2025-ano<=5))&&((dia>=1)&&(dia<=31))&&((mes>=1)&&(mes<=12))){ d=0;
+      }else{
+       System.out.println("*_* DATA invalida ");  
+      }
+      return d;
+   }
+   
+   
+   int verifnome(String m ,String n){
+      int k=1;
+      String x ,y ;
+      
+      
+      x = m.toUpperCase();
+      y = n.toUpperCase();
+      if((x.equals(m))&&(y.equals(n)) && (m != "\n"  && n != "\n" )){
+         k=0;
+      }else{
+         System.out.printf("\n\nos nomes encontram-se em letras minuscula ...! \npor favor escreva em letras maiusculas ...\n\n");
+      }
+      
+      return k;
+   }
+}
+
+
+
+
+
+
+
+
+
